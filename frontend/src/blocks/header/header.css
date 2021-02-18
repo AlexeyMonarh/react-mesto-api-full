@@ -1,0 +1,26 @@
+ @import url('./__logo/header__logo.css');
+ @import url('./__auth/header__auth.css');
+ @import url('./__auth/_mobile/header__auth_mobile.css');
+ @import url('./_mobile/header_mobile.css');
+ @import url('./_width/header_width.css');
+
+ .header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 882px;
+  min-height: 74px;
+  border-bottom: 1px solid #545454;
+  margin: auto;
+  padding-top: 39px;
+  padding-bottom: 40px;
+  padding-left: 0;
+  padding-right: 0;
+ }
+
+ @media screen and (max-width: 767px) {
+  .header {
+    padding: 0;
+  }
+}
