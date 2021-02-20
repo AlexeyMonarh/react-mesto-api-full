@@ -3,7 +3,7 @@ const controllers = require('../controllers/users');
 
 router.get('/', controllers.getUsers);
 router.get('/:_id', controllers.getUser);
-router.post('/', controllers.postUser);
+// router.post('/', controllers.registerUser);
 router.patch('/me', controllers.patchUser);
 router.patch('/me/avatar', controllers.patchAva);
 

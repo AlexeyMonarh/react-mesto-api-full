@@ -21,8 +21,12 @@
   },
   "homepage": "https://github.com/AlexeyMonarh/express-mesto#readme",
   "dependencies": {
+    "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
+    "celebrate": "^13.0.4",
     "express": "^4.17.1",
+    "joi": "^17.4.0",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.13",
     "validator": "^13.5.2"
   },

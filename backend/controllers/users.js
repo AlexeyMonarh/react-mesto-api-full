@@ -1,4 +1,7 @@
+// const bcrypt = require('bcryptjs');
+// const jwt = require('jsonwebtoken');
 const User = require('../models/user');
+const { NotFound } = require('../errors');
 
 const getUsers = (req, res) => {
   User.find({})
@@ -8,36 +11,14 @@ const getUsers = (req, res) => {
     .catch(() => res.status(500).send({ message: 'На сервере произошла ошибка!' }));
 };
 
-const getUser = (req, res) => {
-  User.findById(req.params._id)
-    .orFail(() => {
-      throw new Error('404');
-    })
-    .then((user) => {
-      res.status(200).send({ data: user });
-    })
-    .catch((err) => {
-      if (err.message === '404') {
-        return res.status(404).send({ message: 'Пользователь не найден!' });
-      }
-      if (err.name === 'CastError') {
-        return res.status(400).send({ message: 'Нет пользователя с таким id! Некоректные данные!' });
-      }
-      return res.status(500).send({ message: 'На сервере произошла ошибка!' });
-    });
-};
-
-const postUser = (req, res) => {
-  const { name, about, avatar } = req.body;
-  User.create({ name, about, avatar })
-    .then((user) => res.status(200).send({ data: user }))
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        return res.status(400).send({ message: 'Пользователь не добавлен! Ошибка данных' });
-      }
-      return res.status(500).send({ message: 'На сервере произошла ошибка!' });
-    });
-};
+const getUser = (req, res, next) => User.findOne({ _id: req.params._id })
+  .then((user) => {
+    if (!user) {
+      throw new NotFound('Нет пользователя с таким id!');
+    }
+    res.status(200).send(user);
+  })
+  .catch((err) => next(err));
 
 const patchUser = (req, res) => {
   const { name, about } = req.body;
@@ -76,9 +57,10 @@ const patchAva = (req, res) => {
 };
 
 module.exports = {
+  // login,
   getUsers,
   getUser,
-  postUser,
+  // registerUser,
   patchUser,
   patchAva,
 };
