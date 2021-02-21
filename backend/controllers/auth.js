@@ -4,7 +4,7 @@ const User = require('../models/user');
 const { Conflict, Unauthorized } = require('../errors');
 const { JWT_SECRET, JWT_TTL } = require('../config/index');
 
-const registerUser = (req, res, next) => {
+const createUser = (req, res, next) => {
   const {
     name, about, avatar, email, password,
   } = req.body;
@@ -49,35 +49,13 @@ const login = (req, res, next) => {
     })
     .then(({ _id }) => {
       const token = jwt.sign({ _id }, JWT_SECRET, { expiresIn: JWT_TTL });
-      res.send({ token });
+      res.set('Set-Cookie', token);
+      return res.send({ token });
     })
     .catch(next);
-  // const { email, password } = req.body;
-  // User.findOne({ email })
-  //   .then((user) => {
-  //     if (!user) {
-  //       return Promise.reject(new Error('Неправильные почта или пароль'));
-  //     }
-  //     // const token = jwt.sign({ _id: user._id }, { expiresIn: '7d' });
-  //     // res.send({ token });
-  //     return bcrypt.compare(password, user.password);
-  //   })
-  //   .then((matched) => {
-  //     if (!matched) {
-  //       return Promise.reject(new Error('Неправильные почта или пароль'));
-  //     }
-  //     const token = jwt.sign({ _id: matched._id }, { expiresIn: '7d' });
-  //     res.set('Set-Cookie', token);
-  //     return res.send({ message: 'Всё верно!' });
-  //   })
-  //   .catch((err) => {
-  //     res
-  //       .status(401)
-  //       .send({ message: err.message });
-  //   });
 };
 
 module.exports = {
   login,
-  registerUser,
+  createUser,
 };
