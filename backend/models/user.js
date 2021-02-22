@@ -2,9 +2,6 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 
 const userSchema = new mongoose.Schema({
-  // _id: {
-  //   type: String,
-  // },
   name: {
     type: String,
     default: 'Жак-Ив Кусто',
