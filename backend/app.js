@@ -10,6 +10,8 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const app = express();
 const { PORT = 3000 } = process.env;
+
+app.use(requestLogger);
 app.use(cors());
 mongoose.connect('mongodb://localhost:27017/mestodb', {
   useUnifiedTopology: true,
@@ -17,7 +19,7 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
   useCreateIndex: true,
   useFindAndModify: false,
 });
-app.use(requestLogger);
+
 app.use('/', express.static('public'));
 app.use(bodyParser.json());
 app.use('/', router);

@@ -6,8 +6,8 @@ const loginRoutes = require('./login');
 const registerValidator = require('../middlewares/validators/register');
 const authMiddleware = require('../middlewares/auth');
 
-router.use('/sign-up', registerValidator, registerRoutes);
-router.use('/sign-in', loginRoutes);
+router.use('/signup', registerValidator, registerRoutes);
+router.use('/signin', loginRoutes);
 router.use(authMiddleware);
 router.use('/users', userRoutes);
 router.use('/cards', cardRoutes);

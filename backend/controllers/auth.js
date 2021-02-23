@@ -20,10 +20,10 @@ const createUser = (req, res, next) => {
       name, about, avatar, email, password: hash,
     }))
     .then(({
-      userName, userAbout, userAvatar, userEmail,
+      name, about, avatar, email,
     }) => {
       res.send({
-        userName, userAbout, userAvatar, userEmail,
+        name, about, avatar, email,
       });
     })
     .catch(next);
@@ -49,8 +49,8 @@ const login = (req, res, next) => {
     })
     .then(({ _id }) => {
       const token = jwt.sign({ _id }, JWT_SECRET, { expiresIn: JWT_TTL });
-      res.set('Set-Cookie', token);
-      return res.send({ token });
+      // res.set('Set-Cookie', token);
+      res.send(token);
     })
     .catch(next);
 };
