@@ -98,7 +98,7 @@ function App() {
     const { email, password } = data;
     projectAuth.register(email, password).then((res) => {
       if (res) {
-        history.push('/sign-in');
+        history.push('/signin');
         setRegisterPopup(true);
         setInfoTool({
           message: 'Вы успешно зарегистрировались!',
@@ -132,7 +132,7 @@ function App() {
   function signOut() {
     localStorage.removeItem('jwt')
     setLoggedIn(false)
-    history.push('/sign-in')
+    history.push('/signin')
   }
 
   function handleAddPlaceSubmit(data) {
@@ -246,7 +246,7 @@ function App() {
             setId={setCurrentId}
             handleCardDelete={handleCardDelete}
           />
-          <Route path="/sign-in">
+          <Route path="/signin">
             <Login
               handleLogin={handleLogin}
             />
@@ -257,7 +257,7 @@ function App() {
             />
           </Route>
           <Route>
-            {loggedIn ? <Redirect to="/" /> : <Redirect to="/sign-in" />}
+            {loggedIn ? <Redirect to="/" /> : <Redirect to="/signin" />}
           </Route>
           <Route path="/my-profile">
           </Route>

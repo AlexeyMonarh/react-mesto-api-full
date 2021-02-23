@@ -24,7 +24,7 @@ function Register({ onRegister }) {
   return (
     <div className="loginContainer">
       <div className="header_width">
-        <Header title="Вход" to="/sing-in" />
+        <Header title="Вход" to="/singin" />
       </div>
       <div className="register">
         <form action="#" className="popup__inputs register__form register__form_mobile" onSubmit={habdleSubmite}>
@@ -34,7 +34,7 @@ function Register({ onRegister }) {
           <input type="password" name="password" className="popup__input register__input" onChange={handleChange} value={inputValue.password} placeholder="Пароль" required />
           {/* <span className="popup__error" id="link-error"></span> */}
           <button type="submit" className="popup__submit-button register__button register__button_mobile">Зарегистрироваться</button>
-          <span className="register__span register__span_mobile">Уже зарегистрированы?<Link className="header__auth" to="/sign-in"> Войти</Link></span>
+          <span className="register__span register__span_mobile">Уже зарегистрированы?<Link className="header__auth" to="/signin"> Войти</Link></span>
         </form>
       </div>
     </div>
