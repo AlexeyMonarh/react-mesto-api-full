@@ -23,7 +23,7 @@ function Login({ handleLogin }) {
   return (
     <div className="loginContainer ">
       <div className="header_width">
-        <Header title="Регистрация" to="/sign-up" />
+        <Header title="Регистрация" to="/signup" />
       </div>
       <div className="register">
         <form action="#" onSubmit={habdleSubmite} className="popup__inputs register__form register__form_mobile">

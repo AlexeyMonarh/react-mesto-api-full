@@ -251,7 +251,7 @@ function App() {
               handleLogin={handleLogin}
             />
           </Route>
-          <Route path="/sign-up">
+          <Route path="/signup">
             <Register
               onRegister={handleRegister}
             />
