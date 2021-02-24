@@ -20,6 +20,7 @@ const createUser = (req, res, next) => {
       name, about, avatar, email, password: hash,
     }))
     .then(({
+      // eslint-disable-next-line no-shadow
       name, about, avatar, email,
     }) => {
       res.send({
@@ -49,8 +50,12 @@ const login = (req, res, next) => {
     })
     .then(({ _id }) => {
       const token = jwt.sign({ _id }, JWT_SECRET, { expiresIn: JWT_TTL });
-      // res.set('Set-Cookie', token);
-      res.send(token);
+      // res
+      //   .cookie('jwt', token, {
+      //     maxAge: 3600000,
+      //     httpOnly: true,
+      //   });
+      res.send({ token });
     })
     .catch(next);
 };

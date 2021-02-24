@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 
 const bodyParser = require('body-parser');
-
+const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const router = require('./routes');
 const errorHandler = require('./middlewares/errorHandler');
@@ -12,6 +12,7 @@ const app = express();
 const { PORT = 3000 } = process.env;
 
 app.use(requestLogger);
+app.use(cookieParser());
 app.use(cors());
 mongoose.connect('mongodb://localhost:27017/mestodb', {
   useUnifiedTopology: true,
