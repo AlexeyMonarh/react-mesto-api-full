@@ -1,4 +1,4 @@
-export const BASE_URL = "https://api.monarhmesto.students.nomoreparties";
+export const BASE_URL = "https://api.monarhmesto.students.nomoreparties.space";
 
 export const register = (email, password) => {
   return fetch(`${BASE_URL}/signup`, {
