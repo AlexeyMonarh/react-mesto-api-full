@@ -80,9 +80,8 @@ class Api {
 
 
 const api = new Api({
-  baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-17',
+  baseUrl: 'https://api.monarhmesto.students.nomoreparties',
   headers: {
-    authorization: '6bae60df-6d32-40ec-9280-dea8e2f20679',
     'Content-Type': 'application/json',
   }
 });
