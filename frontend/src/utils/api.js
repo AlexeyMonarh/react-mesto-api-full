@@ -11,6 +11,10 @@ class Api {
     this._headers = options.headers;
   }
 
+  setToken(token){
+    this._headers = token;
+  }
+
   getInitialCards() {
     return fetch(this._baseUrl + '/cards', {
       headers: this._headers

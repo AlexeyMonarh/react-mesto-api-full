@@ -126,6 +126,9 @@ function App() {
         localStorage.setItem('jwt', res.token)
       }
     })
+    .then((res) => {
+      api.setToken(res.token);
+    })
       .catch(err)
   }
 
