@@ -121,15 +121,12 @@ function App() {
     setUserData({ email: email });
     projectAuth.authorize(email, password).then((res) => {
       if (res.token) {
-        history.push('/')
         setLoggedIn(true);
+        history.push('/')
+        api.setToken(res.token);
         localStorage.setItem('jwt', res.token)
       }
-    })
-    .then((res) => {
-      api.setToken(res.token);
-    })
-      .catch(err)
+    }).catch(err)
   }
 
   function signOut() {
