@@ -72,6 +72,9 @@ function App() {
   useEffect(() => {
     if (loggedIn) {
       history.push('/');
+      api.getInitialCards().then((res) => {
+        setCards(res);
+      });
     }
   }, [loggedIn]);
 
@@ -82,11 +85,11 @@ function App() {
     };
   });
 
-  useEffect(() => {
-    api.getInitialCards().then((res) => {
-      setCards(res);
-    }).catch(err)
-  }, []);
+  // useEffect(() => {
+  //   api.getInitialCards().then((res) => {
+  //     setCards(res);
+  //   }).catch(err)
+  // }, []);
 
   useEffect(() => {
     api.getUser().then((res) => {
