@@ -5,7 +5,7 @@ const validator = require('validator');
 const register = celebrate({
   body: {
     // _id: Joi.string().required().custom((value, helper) => {
-    //   if (mongoose.Types.ObjectId.isValid(value)) {
+    //   if (mongoose.Types.ObjectId.toString(value)) {
     //     return value;
     //   }
     //   return helper.message('Невалидный ID');
@@ -36,12 +36,6 @@ const register = celebrate({
         'string.max': 'Максимум 30 символов',
         'any.required': 'Обязательное поле',
       }),
-    link: Joi.string().custom((value, helper) => {
-      if (validator.isURL(value)) {
-        return value;
-      }
-      return helper.message('Невалидный URL');
-    }),
   },
 });
 

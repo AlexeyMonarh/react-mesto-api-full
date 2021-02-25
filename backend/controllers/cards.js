@@ -5,10 +5,10 @@ const { NotFound, BadRequest } = require('../errors');
 const getCards = (req, res, next) => {
   Card.find({})
     .then((cards) => {
-      if (!cards) {
+      if (!cards.length) {
         throw new NotFound('Нет карточек!');
       }
-      res.status(200).send(cards);
+      return res.status(200).send(cards);
     })
     .catch(next);
 };
@@ -17,41 +17,26 @@ const postCard = (req, res, next) => {
   const { name, link } = req.body;
   const owner = req.user._id;
   Card.create({ name, link, owner })
-    // eslint-disable-next-line no-shadow
-    .then(({ name, link, owner }) => {
-      if (link) {
-        throw new BadRequest('Карточка не созданна! Ошибка данных');
-      }
-      return res.send({ name, link, owner });
-    })
+    .then(
+      (err) => {
+        if (err.name === 'ValidationError') {
+          throw new BadRequest('Карточка не созданна! Ошибка данных');
+        }
+      },
+    )
+    .then((card) => res.status(200).send({ data: card }))
     .catch(next);
-  // (err) => {
-
-  //   return res.status(500).send({ message: 'На сервере произошла ошибка!' });
-  // },
 };
 
 const deleteCard = (req, res, next) => {
   Card.findByIdAndRemove(req.params._id)
-    // .orFail(() => {
-    //   throw new Error('404');
-    // })
     .then((card) => {
       if (!card) {
         throw new NotFound('Карточка не найдена!');
       }
-      res.status(200).send(card);
+      res.status(200).send('Карточка удалена!');
     })
     .catch(next);
-  //   (err) => {
-  //   if (err.message === '404') {
-  //     return res.status(404).send({ message: 'Карточка не найдена!' });
-  //   }
-  //   if (err instanceof mongoose.CastError) {
-  //     return res.status(400).send({ message: 'Переданы некорректные данные!' });
-  //   }
-  //   return res.status(500).send({ message: 'На сервере произошла ошибка!' });
-  // });
 };
 
 const likeCard = (req, res) => {
@@ -60,9 +45,9 @@ const likeCard = (req, res) => {
     { $addToSet: { likes: req.user._id } },
     { new: true },
   )
-    .orFail(() => {
-      throw new Error('404');
-    })
+    // .orFail(() => {
+    //   throw new Error('404');
+    // })
     .then((like) => res.status(200).send({ data: like }))
     .catch((err) => {
       if (err.message === '404') {

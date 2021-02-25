@@ -1,13 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 
-// const { ObjectId } = mongoose.Types.ObjectId;
-
 const userSchema = new mongoose.Schema({
-  _id: {
-    type: String,
-    sequence_value: Number,
-  },
   name: {
     type: String,
     default: 'Жак-Ив Кусто',
