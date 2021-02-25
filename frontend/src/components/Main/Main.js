@@ -9,7 +9,7 @@ function Main(props) {
 
   return (
     <main className="content">
-      <Header headerMob={'header_mobile'} email={props.email} title="Выход" onClick={props.signOut} to=""/>
+      <Header headerMob={'header_mobile'} email={props.email} title="Выход" onClick={props.signOut} to="" />
       <section className="profile">
         <div className="profile__avatar-hover" onClick={props.onEditAvatar} style={{ backgroundImage: `url(${currentUser.avatar})` }}>
         </div>
@@ -24,15 +24,15 @@ function Main(props) {
       </section>
       <section>
         <ul className="elements">
-          {props.cards.map((data, _id) => {
+          {props.cards.map(({ _id, link, name, likes }) => {
             return (
               <Card
-                key={data._id}
-                data={data}
-                link={data.link}
-                name={data.name}
-                _id={data._id}
-                likes={data.likes}
+                key={_id}
+                // data={data}
+                link={link}
+                name={name}
+                _id={_id}
+                likes={likes}
                 onCardClick={props.onCardClick}
                 onCardLike={props.onCardLike}
                 setId={props.setId}

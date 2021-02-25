@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
 const Card = require('../models/card');
 
 const getCards = (req, res) => {
@@ -11,38 +11,38 @@ const getCards = (req, res) => {
     });
 };
 
-const postCard = (req, res) => {
+const postCard = (req, res, next) => {
   const { name, link } = req.body;
   const owner = req.user._id;
   Card.create({ name, link, owner })
-    .then((card) => res.status(200).send(card))
-    .catch(
-      (err) => {
-        if (err.name === 'ValidationError') {
-          return res.status(400).send({ message: 'Карточка не созданна! Ошибка данных' });
-        }
-        return res.status(500).send({ message: 'На сервере произошла ошибка!' });
-      },
-    );
+    .then((card) => res.send(card))
+    .catch(next);
+  // (err) => {
+  //   if (err.name === 'ValidationError') {
+  //     return res.status(400).send({ message: 'Карточка не созданна! Ошибка данных' });
+  //   }
+  //   return res.status(500).send({ message: 'На сервере произошла ошибка!' });
+  // },
 };
 
-const deleteCard = (req, res) => {
+const deleteCard = (req, res, next) => {
   Card.findByIdAndRemove(req.params._id)
-    .orFail(() => {
-      throw new Error('404');
-    })
+    // .orFail(() => {
+    //   throw new Error('404');
+    // })
     .then((card) => {
-      res.status(200).send(card);
+      res.send({ data: card });
     })
-    .catch((err) => {
-      if (err.message === '404') {
-        return res.status(404).send({ message: 'Карточка не найдена!' });
-      }
-      if (err instanceof mongoose.CastError) {
-        return res.status(400).send({ message: 'Переданы некорректные данные!' });
-      }
-      return res.status(500).send({ message: 'На сервере произошла ошибка!' });
-    });
+    .catch(next);
+  //   (err) => {
+  //   if (err.message === '404') {
+  //     return res.status(404).send({ message: 'Карточка не найдена!' });
+  //   }
+  //   if (err instanceof mongoose.CastError) {
+  //     return res.status(400).send({ message: 'Переданы некорректные данные!' });
+  //   }
+  //   return res.status(500).send({ message: 'На сервере произошла ошибка!' });
+  // });
 };
 
 const likeCard = (req, res) => {

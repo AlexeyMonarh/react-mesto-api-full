@@ -115,14 +115,12 @@ function App() {
 
   function handleLogin(data) {
     const { email, password } = data;
-    // setUserData({ email: email });
     projectAuth.authorize(email, password).then((res) => {
       if (res.token) {
         history.push('/');
         setLoggedIn(true);
         setUserData({ email: email });
         localStorage.setItem('jwt', res.token);
-        // api.setToken(res.token) 
       }
     })
       .catch(err)
