@@ -56,7 +56,7 @@ function App() {
     if (token) {
       projectAuth.getContent(token).then((res) => {
         if (res) {
-          setUserData({ email: res.data.email });
+          setUserData({ email: res.email });
         }
       })
         .then(() => {
@@ -84,12 +84,6 @@ function App() {
       document.removeEventListener("keydown", escFunction, false);
     };
   });
-
-  // useEffect(() => {
-  //   api.getInitialCards().then((res) => {
-  //     setCards(res);
-  //   }).catch(err)
-  // }, []);
 
   useEffect(() => {
     api.getUser().then((res) => {
