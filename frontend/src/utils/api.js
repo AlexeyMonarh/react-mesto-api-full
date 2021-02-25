@@ -11,9 +11,9 @@ class Api {
     this._headers = options.headers;
   }
 
-  setToken(token){
-    this._headers.authorization = token;
-  }
+  // setToken(token){
+  //   this._headers.authorization = token;
+  // }
 
   getInitialCards() {
     return fetch(this._baseUrl + '/cards', {
@@ -86,7 +86,7 @@ class Api {
 const api = new Api({
   baseUrl: 'https://api.monarhmesto.students.nomoreparties.space',
   headers: {
-    authorization: '',
+    authorization: localStorage.getItem('jwt'),
     'Content-Type': 'application/json',
   }
 });
