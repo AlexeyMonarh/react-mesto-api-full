@@ -1,21 +1,22 @@
 // const mongoose = require('mongoose');
 const Card = require('../models/card');
 
-const getCards = (req, res) => {
+const getCards = (req, res, next) => {
   Card.find({})
     .then((cards) => {
       res.status(200).send(cards);
     })
-    .catch(() => {
-      res.status(500).send({ message: 'На сервере произошла ошибка!' });
-    });
+    .catch(next);
+  //   () => {
+  //   res.status(500).send({ message: 'На сервере произошла ошибка!' });
+  // });
 };
 
 const postCard = (req, res, next) => {
   const { name, link } = req.body;
   const owner = req.user._id;
   Card.create({ name, link, owner })
-    .then((card) => res.send(card))
+    .then((card) => res.send({ data: card }))
     .catch(next);
   // (err) => {
   //   if (err.name === 'ValidationError') {
