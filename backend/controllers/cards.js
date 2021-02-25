@@ -1,27 +1,32 @@
 // const mongoose = require('mongoose');
 const Card = require('../models/card');
+const { NotFound, BadRequest } = require('../errors');
 
 const getCards = (req, res, next) => {
   Card.find({})
     .then((cards) => {
+      if (!cards) {
+        throw new NotFound('Нет карточек!');
+      }
       res.status(200).send(cards);
     })
     .catch(next);
-  //   () => {
-  //   res.status(500).send({ message: 'На сервере произошла ошибка!' });
-  // });
 };
 
 const postCard = (req, res, next) => {
   const { name, link } = req.body;
   const owner = req.user._id;
   Card.create({ name, link, owner })
-    .then((card) => res.send({ data: card }))
+    // eslint-disable-next-line no-shadow
+    .then(({ name, link, owner }) => {
+      if (link) {
+        throw new BadRequest('Карточка не созданна! Ошибка данных');
+      }
+      return res.send({ name, link, owner });
+    })
     .catch(next);
   // (err) => {
-  //   if (err.name === 'ValidationError') {
-  //     return res.status(400).send({ message: 'Карточка не созданна! Ошибка данных' });
-  //   }
+
   //   return res.status(500).send({ message: 'На сервере произошла ошибка!' });
   // },
 };
@@ -32,7 +37,10 @@ const deleteCard = (req, res, next) => {
     //   throw new Error('404');
     // })
     .then((card) => {
-      res.send({ data: card });
+      if (!card) {
+        throw new NotFound('Карточка не найдена!');
+      }
+      res.status(200).send(card);
     })
     .catch(next);
   //   (err) => {

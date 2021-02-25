@@ -4,6 +4,9 @@ const validator = require('validator');
 const { ObjectId } = mongoose.Types.ObjectId;
 
 const cardSchema = new mongoose.Schema({
+  _id: {
+    type: ObjectId,
+  },
   name: {
     type: String,
     required: true,

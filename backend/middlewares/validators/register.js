@@ -36,6 +36,12 @@ const register = celebrate({
         'string.max': 'Максимум 30 символов',
         'any.required': 'Обязательное поле',
       }),
+    link: Joi.string().custom((value, helper) => {
+      if (validator.isURL(value)) {
+        return value;
+      }
+      return helper.message('Невалидный URL');
+    }),
   },
 });
 

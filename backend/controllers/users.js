@@ -7,7 +7,7 @@ const getUsers = (req, res, next) => {
       if (!users) {
         throw new NotFound('Нет пользователей!');
       }
-      res.status(200).send(users);
+      return res.status(200).send(users);
     })
     .catch((err) => next(err));
 };
@@ -17,7 +17,7 @@ const getUser = (req, res, next) => User.findOne({ _id: req.params._id })
     if (!user) {
       throw new NotFound('Нет пользователя с таким id!');
     }
-    res.status(200).send(user);
+    return res.status(200).send(user);
   })
   .catch((err) => next(err));
 
