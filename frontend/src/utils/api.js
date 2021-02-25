@@ -12,7 +12,7 @@ class Api {
   }
 
   setToken(token){
-    this._headers = token;
+    this._headers.authorization = token;
   }
 
   getInitialCards() {
