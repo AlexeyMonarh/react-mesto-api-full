@@ -86,6 +86,7 @@ class Api {
 const api = new Api({
   baseUrl: 'https://api.monarhmesto.students.nomoreparties.space',
   headers: {
+    authorization: '',
     'Content-Type': 'application/json',
   }
 });
