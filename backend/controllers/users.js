@@ -22,13 +22,12 @@ const getUserId = (req, res, next) => User.findOne({ _id: req.params._id })
   .catch((err) => next(err));
 
 const getUser = (req, res, next) => {
-  const { name, about } = req.body;
-  User.findByIdAndUpdate(req.user._id, { name, about })
+  User.findById(req.user._id)
     .then((user) => {
       if (!user) {
         throw new NotFound('Нет пользователя с таким id!');
       }
-      res.status(200).send(user);
+      res.status(200).send({ data: user });
     })
     .catch((err) => next(err));
 };
@@ -40,7 +39,7 @@ const patchUser = (req, res, next) => {
       if (!user) {
         throw new NotFound('Нет пользователя с таким id!');
       }
-      res.status(200).send(user);
+      res.status(200).send({ data: user });
     })
     .catch((err) => next(err));
 };

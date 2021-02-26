@@ -12,7 +12,7 @@ function Card(props) {
 
   function setCardId() {
     props.onPopupDelete();
-    props.setId(props._id);
+    props.setId(props.data._id);
   }
 
   function handleLikeClick() {
