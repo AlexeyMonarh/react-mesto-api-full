@@ -73,7 +73,8 @@ function App() {
     if (loggedIn) {
       history.push('/');
       api.getInitialCards().then((res) => {
-        setCards(res);
+        setCards(res)
+        
       });
     }
   }, [loggedIn]);

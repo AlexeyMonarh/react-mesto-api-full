@@ -31,9 +31,16 @@ const postCard = (req, res, next) => {
 const deleteCard = (req, res, next) => {
   Card.findByIdAndRemove(req.params._id)
     .then((card) => {
-      if (!card) {
-        throw new NotFound('Карточка не найдена!');
+      if (String(card.owner) !== String(req.user._id)) {
+        console.log(card.owner, req.user._id, card._id);
+        throw new BadRequest('Карточка не удалена');
       }
+      return Card.findByIdAndRemove(card._id);
+      // if (!card) {
+      //   throw new NotFound('Карточка не найдена!');
+      // }
+    })
+    .then(() => {
       res.status(200).send('Карточка удалена!');
     })
     .catch(next);
@@ -45,10 +52,11 @@ const likeCard = (req, res) => {
     { $addToSet: { likes: req.user._id } },
     { new: true },
   )
-    // .orFail(() => {
-    //   throw new Error('404');
-    // })
-    .then((like) => res.status(200).send({ data: like }))
+    .orFail(() => {
+      throw new Error('404');
+    })
+    .then((like) => res.status(200).send(like))
+    .then((card) => Card.findById(card._id))
     .catch((err) => {
       if (err.message === '404') {
         return res.status(404).send({ message: 'Карточка не найдена!' });
