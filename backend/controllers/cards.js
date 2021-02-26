@@ -77,7 +77,8 @@ const dislikeCard = (req, res) => {
     .orFail(() => {
       throw new Error('404');
     })
-    .then((dislike) => res.status(200).send({ data: dislike }))
+    .then((dislike) => res.status(200).send(dislike))
+    .then((card) => Card.findById(card._id))
     .catch((err) => {
       if (err.message === '404') {
         return res.status(404).send({ message: 'Карточка не найдена!' });

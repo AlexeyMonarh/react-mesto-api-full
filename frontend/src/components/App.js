@@ -52,11 +52,18 @@ function App() {
   };
 
   useEffect(() => {
+    api.getUser().then((res) => {
+      setСurrentUser(res.data);
+    }).catch(err)
+  }, []);
+
+
+  useEffect(() => {
     const token = localStorage.getItem('jwt');
     if (token) {
       projectAuth.getContent(token).then((res) => {
         if (res) {
-          setUserData({ email: res.email });
+          setUserData({ email: res.data.email });
         }
       })
         .then(() => {
@@ -86,12 +93,6 @@ function App() {
     };
   });
 
-  useEffect(() => {
-    api.getUser().then((res) => {
-      setСurrentUser(res);
-    }).catch(err)
-  }, []);
-
   function handleRegister(data) {
     const { email, password } = data;
     projectAuth.register(email, password).then((res) => {
@@ -116,11 +117,11 @@ function App() {
 
   function handleLogin(data) {
     const { email, password } = data;
+    setUserData({ email: email });
     projectAuth.authorize(email, password).then((res) => {
       if (res.token) {
         history.push('/');
         setLoggedIn(true);
-        setUserData({ email: email });
         localStorage.setItem('jwt', res.token);
       }
     })
@@ -150,9 +151,11 @@ function App() {
   function handleCardLike(card) {
     const isLiked = card.likes.some(i => i === currentUser._id);
     api.changeLikeCardStatus(card._id, !isLiked).then((newCard) => {
-      const newCards = cards.map((c) => c._id === card._id ? newCard.data : c);
+      const newCards = cards.map((c) => c._id === card._id ? newCard : c);
       setCards(newCards);
-    }).catch(err)
+    })
+      // .then(cards => setCards(cards))
+      .catch(err)
   }
 
   function handleCardDelete(cardId) {
@@ -210,7 +213,7 @@ function App() {
   };
 
   function handleCardClick(props) {
-    setSelectedCard({ link: props.link, name: props.name });
+    setSelectedCard({ link: props.data.link, name: props.data.name });
   }
 
   function closeAllPopups() {
@@ -256,8 +259,6 @@ function App() {
           </Route>
           <Route>
             {loggedIn ? <Redirect to="/" /> : <Redirect to="/signin" />}
-          </Route>
-          <Route path="/my-profile">
           </Route>
         </Switch>
 

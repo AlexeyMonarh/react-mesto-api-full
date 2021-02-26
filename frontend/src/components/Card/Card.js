@@ -7,7 +7,7 @@ function Card(props) {
   const cardDeleteButtonClassName = (
     `elements__element-delete-button ${isOwn ? 'elements__element-delete-button_visible' : 'elements__element-delete-button_hidden'}`
   );
-  const isLiked = props.likes.some(i => i === currentUser._id);
+  const isLiked = props.data.likes.some(i => i === currentUser._id);
   const cardLikeButtonClassName = `elements__element-like ${isLiked ? 'elements__element-like_visible' : 'elements__element-like_hidden'}`;
 
   function setCardId() {
@@ -16,7 +16,7 @@ function Card(props) {
   }
 
   function handleLikeClick() {
-    props.onCardLike(props);
+    props.onCardLike(props.data);
   }
 
   function handleClick() {
@@ -26,12 +26,12 @@ function Card(props) {
   return (
     <li className="elements__element">
       <button type="submit" className={cardDeleteButtonClassName} onClick={setCardId}></button>
-      <img src={props.link} id="" alt="Места-России" className="elements__element-img" onClick={handleClick} />
+      <img src={props.data.link} id="" alt="Места-России" className="elements__element-img" onClick={handleClick} />
       <div className="elements__element-description">
-        <h2 className="elements__element-title">{props.name}</h2>
+        <h2 className="elements__element-title">{props.data.name}</h2>
         <div className="elements__element-like-box">
           <button type="submit" className={cardLikeButtonClassName} onClick={handleLikeClick}></button>
-          <div className="elements__element-likes">{props.likes.length}</div>
+          <div className="elements__element-likes">{props.data.likes.length}</div>
         </div>
       </div>
     </li>
