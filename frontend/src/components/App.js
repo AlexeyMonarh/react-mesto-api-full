@@ -18,6 +18,7 @@ import api from '../utils/api';
 import * as projectAuth from '../utils/projectAuth';
 
 function App() {
+  const history = useHistory();
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
@@ -43,27 +44,17 @@ function App() {
     console.log(`Ошибка: ${res}`);
   };
 
-  const history = useHistory();
-
-  useEffect(() => {
-    api.getUser().then((res) => {
-      setСurrentUser(res.data);
-    }).catch(err)
-  }, []);
-
-
   useEffect(() => {
     const token = localStorage.getItem('jwt');
     if (token) {
       projectAuth.getContent(token).then((res) => {
         if (res) {
           setUserData({ email: res.data.email });
+          setLoggedIn(true);
+          setСurrentUser(res.data);
+          // history.push("/");
         }
       })
-        .then(() => {
-          setLoggedIn(true);
-          history.push("/");
-        })
         .catch((res) => {
           console.log(`Ошибка: ${res}`);
         })
@@ -74,12 +65,24 @@ function App() {
   useEffect(() => {
     if (loggedIn) {
       history.push('/');
-      api.getInitialCards().then((res) => {
-        setCards(res)
-      })
+      // .catch(err)
+      // api.getInitialCards().then((res) => {
+      //   setCards(res)
+      // })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loggedIn]);
+
+  useEffect(() => {
+    Promise.all([api.getUser(), api.getInitialCards()])
+      .then(([userData, cardData]) => {
+        setСurrentUser(userData.data);
+        setCards(cardData);
+      })
+    // api.getUser().then((res) => {
+    //   setСurrentUser(res.data);
+    // }).catch(err)
+  }, []);
 
   useEffect(() => {
     document.addEventListener("keydown", escFunction, false);
@@ -207,7 +210,7 @@ function App() {
   };
 
   function handleCardClick(props) {
-    setSelectedCard({ link: props.data.link, name: props.data.name });
+    setSelectedCard({ link: props.link, name: props.name });
   }
 
   function closeAllPopups() {
