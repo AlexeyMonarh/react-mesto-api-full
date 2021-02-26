@@ -12,7 +12,7 @@ const getUsers = (req, res, next) => {
     .catch((err) => next(err));
 };
 
-const getUser = (req, res, next) => User.findOne({ _id: req.params._id })
+const getUserId = (req, res, next) => User.findOne({ _id: req.params._id })
   .then((user) => {
     if (!user) {
       throw new NotFound('Нет пользователя с таким id!');
@@ -20,6 +20,18 @@ const getUser = (req, res, next) => User.findOne({ _id: req.params._id })
     return res.status(200).send(user);
   })
   .catch((err) => next(err));
+
+const getUser = (req, res, next) => {
+  const { name, about } = req.body;
+  User.findByIdAndUpdate(req.user._id, { name, about })
+    .then((user) => {
+      if (!user) {
+        throw new NotFound('Нет пользователя с таким id!');
+      }
+      res.status(200).send(user);
+    })
+    .catch((err) => next(err));
+};
 
 const patchUser = (req, res, next) => {
   const { name, about } = req.body;
@@ -46,8 +58,9 @@ const patchAva = (req, res, next) => {
 };
 
 module.exports = {
-  getUsers,
   getUser,
+  getUsers,
+  getUserId,
   patchUser,
   patchAva,
 };

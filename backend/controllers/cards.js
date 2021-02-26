@@ -18,13 +18,13 @@ const postCard = (req, res, next) => {
   const owner = req.user._id;
   Card.create({ name, link, owner })
     .then(
-      (err) => {
-        if (err.name === 'ValidationError') {
-          throw new BadRequest('Карточка не созданна! Ошибка данных');
+      (isValid) => {
+        if (isValid) {
+          return res.status(200).send('Карточка создана!');
         }
+        throw new BadRequest('Карточка не созданна! Ошибка данных');
       },
     )
-    .then((card) => res.status(200).send({ data: card }))
     .catch(next);
 };
 
