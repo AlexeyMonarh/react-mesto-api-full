@@ -164,9 +164,9 @@ function App() {
       .catch(err)
   }
 
-  function handleUpdateAvatar(data) {
+  function handleUpdateAvatar(avatar) {
     setSavePreload('Сохранение...')
-    api.setAvatar(data)
+    api.setAvatar(avatar)
       .then((res) => {
         setСurrentUser(res);
       })
@@ -180,7 +180,7 @@ function App() {
 
   function handleUpdateUser(data) {
     setSavePreload('Сохранение...')
-    api.setUserInfo(data.name, data.about)
+    api.setUserInfo(data)
       .then((res) => {
         setСurrentUser(res);
         closeAllPopups();

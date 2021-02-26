@@ -27,19 +27,20 @@ const getUser = (req, res, next) => {
       if (!user) {
         throw new NotFound('Нет пользователя с таким id!');
       }
-      res.status(200).send({ data: user });
+      return res.status(200).send({ data: user });
     })
     .catch((err) => next(err));
 };
 
 const patchUser = (req, res, next) => {
   const { name, about } = req.body;
-  User.findByIdAndUpdate(req.user._id, { name, about })
+  User.findByIdAndUpdate(req.user._id, { name, about }, { runValidators: true, new: true })
     .then((user) => {
-      if (!user) {
+      if (user) {
+        res.status(200).send(user);
+      } else {
         throw new NotFound('Нет пользователя с таким id!');
       }
-      res.status(200).send({ data: user });
     })
     .catch((err) => next(err));
 };
@@ -51,7 +52,7 @@ const patchAva = (req, res, next) => {
       if (!user) {
         throw new NotFound('Нет пользователя с таким id!');
       }
-      res.status(200).send(user);
+      return res.status(200).send(user);
     })
     .catch((err) => next(err));
 };
