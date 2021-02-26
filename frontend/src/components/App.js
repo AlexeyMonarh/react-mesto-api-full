@@ -45,12 +45,6 @@ function App() {
 
   const history = useHistory();
 
-  const escFunction = (event) => {
-    if (event.keyCode === 27) {
-      closeAllPopups();
-    }
-  };
-
   useEffect(() => {
     api.getUser().then((res) => {
       setСurrentUser(res.data);
@@ -74,6 +68,7 @@ function App() {
           console.log(`Ошибка: ${res}`);
         })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -81,9 +76,9 @@ function App() {
       history.push('/');
       api.getInitialCards().then((res) => {
         setCards(res)
-
-      });
+      })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loggedIn]);
 
   useEffect(() => {
@@ -151,10 +146,9 @@ function App() {
   function handleCardLike(card) {
     const isLiked = card.likes.some(i => i === currentUser._id);
     api.changeLikeCardStatus(card._id, !isLiked).then((newCard) => {
-      const newCards = cards.map((c) => c._id === card._id ? newCard : c);
+      const newCards = cards.map((c) => c._id === card._id ? newCard.data : c);
       setCards(newCards);
     })
-      // .then(cards => setCards(cards))
       .catch(err)
   }
 
@@ -224,6 +218,12 @@ function App() {
     setSelectedCard(false);
     setRegisterPopup(false);
   }
+
+  const escFunction = (event) => {
+    if (event.keyCode === 27) {
+      closeAllPopups();
+    }
+  };
 
   return (
     <CurrentUserContext.Provider value={currentUser}>

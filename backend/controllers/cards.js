@@ -55,7 +55,7 @@ const likeCard = (req, res) => {
     .orFail(() => {
       throw new Error('404');
     })
-    .then((like) => res.status(200).send(like))
+    .then((like) => res.status(200).send({ data: like }))
     .then((card) => Card.findById(card._id))
     .catch((err) => {
       if (err.message === '404') {
@@ -77,7 +77,7 @@ const dislikeCard = (req, res) => {
     .orFail(() => {
       throw new Error('404');
     })
-    .then((dislike) => res.status(200).send(dislike))
+    .then((dislike) => res.status(200).send({ data: dislike }))
     .then((card) => Card.findById(card._id))
     .catch((err) => {
       if (err.message === '404') {

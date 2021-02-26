@@ -1,14 +1,14 @@
-// const { CelebrateError } = require('celebrate');
-// const mongoose = require('mongoose');
+const { CelebrateError } = require('celebrate');
+const mongoose = require('mongoose');
 
 const errorHandler = (err, req, res, next) => {
   console.log(err);
-  // if (err instanceof CelebrateError) {
-  //   return res.status(400).send(err.details.get('body'));
-  // }
-  // if (err instanceof mongoose.Error.ValidationError) {
-  //   return res.status(400).send(err.details.get('body'));
-  // }
+  if (err instanceof CelebrateError) {
+    return res.status(400).send(err.details.get('body'));
+  }
+  if (err instanceof mongoose.Error.ValidationError) {
+    return res.status(400).send(err.details.get('body'));
+  }
   if (err.status) {
     return res.status(err.status).send({ message: err.message });
   }
