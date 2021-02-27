@@ -1,5 +1,6 @@
+const mongoose = require('mongoose');
 const Card = require('../models/card');
-const { NotFound } = require('../errors');
+const { NotFound, Conflict } = require('../errors');
 
 const getCards = (req, res, next) => {
   Card.find({})
@@ -7,7 +8,7 @@ const getCards = (req, res, next) => {
       if (!cards.length) {
         throw new NotFound('Нет карточек!');
       }
-      return res.status(200).send(cards);
+      return res.send(cards);
     })
     .catch(next);
 };
@@ -22,13 +23,21 @@ const postCard = (req, res, next) => {
 
 const deleteCard = (req, res, next) => {
   Card.findByIdAndRemove(req.params._id, { new: true })
-    .orFail(() => {
-      throw new NotFound('Карточка не найдена!');
-    })
     .then((card) => {
-      res.status(200).send({ data: card });
+      if (!card) {
+        throw new NotFound('Карточка не найдена!');
+      }
+      if (String(card.owner) !== String(req.user._id)) {
+        throw new Conflict('Карточка не удалена! Вы ее не создавали!');
+      }
+      return res.send({ data: card });
     })
-    .catch(next);
+    .catch((err) => {
+      if (err instanceof mongoose.CastError) {
+        res.status(400).send({ message: 'Невалидный ID' });
+      }
+      next(err);
+    });
 };
 
 const likeCard = (req, res, next) => {
@@ -37,11 +46,18 @@ const likeCard = (req, res, next) => {
     { $addToSet: { likes: req.user._id } },
     { new: true },
   )
-    .orFail(() => {
-      throw new NotFound('Карточка не найдена!');
+    .then((like) => {
+      if (!like) {
+        throw new NotFound('Лайк не поставлен! На сервере нет такой карточки!');
+      }
+      return res.send({ data: like });
     })
-    .then((like) => res.status(200).send({ data: like }))
-    .catch(next);
+    .catch((err) => {
+      if (err instanceof mongoose.CastError) {
+        res.status(400).send({ message: 'Невалидный ID' });
+      }
+      next(err);
+    });
 };
 
 const dislikeCard = (req, res, next) => {
@@ -50,11 +66,18 @@ const dislikeCard = (req, res, next) => {
     { $pull: { likes: req.user._id } },
     { new: true },
   )
-    .orFail(() => {
-      throw new NotFound('Карточка не найдена!');
+    .then((dislike) => {
+      if (!dislike) {
+        throw new NotFound('Дизлайк не поставлен! На сервере нет такой карточки!');
+      }
+      return res.send({ data: dislike });
     })
-    .then((dislike) => res.status(200).send({ data: dislike }))
-    .catch(next);
+    .catch((err) => {
+      if (err instanceof mongoose.CastError) {
+        res.status(400).send({ message: 'Невалидный ID' });
+      }
+      next(err);
+    });
 };
 
 module.exports = {

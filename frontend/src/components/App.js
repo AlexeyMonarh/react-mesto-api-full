@@ -69,7 +69,7 @@ function App() {
       api.getUser().then((res) => {
         setСurrentUser(res.data);
       })
-      .catch(err)
+        .catch(err)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loggedIn]);

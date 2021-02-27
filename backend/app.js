@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const { errors } = require('celebrate');
 const router = require('./routes');
 const errorHandler = require('./middlewares/errorHandler');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
@@ -19,10 +20,10 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
   useFindAndModify: false,
 });
 
-app.use('/', express.static('public'));
 app.use(bodyParser.json());
 app.use('/', router);
 app.use(errorLogger);
+app.use(errors());
 app.use(errorHandler);
 
 app.listen(PORT, () => {

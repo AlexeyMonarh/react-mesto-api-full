@@ -8,14 +8,9 @@ const getUsers = (req, res, next) => {
       if (!users) {
         throw new NotFound('Нет пользователей!');
       }
-      return res.status(200).send(users);
+      return res.send(users);
     })
-    .catch((err) => {
-      if (err instanceof mongoose.CastError) {
-        res.status(400).send({ message: 'id пользователя не верно' });
-      }
-      next(err);
-    });
+    .catch(next);
 };
 
 const getUserId = (req, res, next) => User.findById(req.params._id)
@@ -23,11 +18,11 @@ const getUserId = (req, res, next) => User.findById(req.params._id)
     if (!user) {
       throw new NotFound('Нет пользователя с таким id!');
     }
-    return res.status(200).send(user);
+    return res.send(user);
   })
   .catch((err) => {
     if (err instanceof mongoose.CastError) {
-      res.status(400).send({ message: 'Невалидный id' });
+      res.status(400).send({ message: 'Невалидный ID' });
     }
     next(err);
   });
@@ -38,9 +33,9 @@ const getUser = (req, res, next) => {
       if (!user) {
         throw new NotFound('Нет пользователя с таким id!');
       }
-      return res.status(200).send({ data: user });
+      return res.send({ data: user });
     })
-    .catch((err) => next(err));
+    .catch(next);
 };
 
 const patchUser = (req, res, next) => {
@@ -48,12 +43,11 @@ const patchUser = (req, res, next) => {
   User.findByIdAndUpdate(req.user._id, { name, about }, { runValidators: true, new: true })
     .then((user) => {
       if (user) {
-        res.status(200).send(user);
-      } else {
-        throw new NotFound('Нет пользователя с таким id!');
+        return res.send(user);
       }
+      throw new NotFound('Нет пользователя с таким id!');
     })
-    .catch((err) => next(err));
+    .catch(next);
 };
 
 const patchAva = (req, res, next) => {
@@ -63,9 +57,9 @@ const patchAva = (req, res, next) => {
       if (!user) {
         throw new NotFound('Нет пользователя с таким id!');
       }
-      return res.status(200).send(user);
+      return res.send(user);
     })
-    .catch((err) => next(err));
+    .catch(next);
 };
 
 module.exports = {
