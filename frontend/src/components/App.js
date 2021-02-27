@@ -85,7 +85,6 @@ function App() {
     const { email, password } = data;
     projectAuth.register(email, password).then((res) => {
       if (res) {
-        setСurrentUser(res);
         history.push('/signin');
         setRegisterPopup(true);
         setInfoTool({
@@ -109,9 +108,9 @@ function App() {
     setUserData({ email: email });
     projectAuth.authorize(email, password).then((res) => {
       if (res.token) {
-        history.push('/');
-        setLoggedIn(true);
         localStorage.setItem('jwt', res.token);
+        setLoggedIn(true);
+        history.push('/');
       }
     })
       .catch(err)

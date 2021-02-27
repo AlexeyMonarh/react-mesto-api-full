@@ -3,7 +3,7 @@ const validator = require('validator');
 
 const upUsAva = celebrate({
   body: {
-    avatar: Joi.string().custom((value, helper) => {
+    avatar: Joi.string().required().custom((value, helper) => {
       if (validator.isURL(value)) {
         return value;
       }

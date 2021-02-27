@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Card = require('../models/card');
-const { NotFound, Conflict } = require('../errors');
+const { NotFound, Forbidden } = require('../errors');
 
 const getCards = (req, res, next) => {
   Card.find({})
@@ -22,15 +22,18 @@ const postCard = (req, res, next) => {
 };
 
 const deleteCard = (req, res, next) => {
-  Card.findByIdAndRemove(req.params._id, { new: true })
+  Card.findById(req.params._id, { new: true })
     .then((card) => {
       if (!card) {
         throw new NotFound('Карточка не найдена!');
       }
       if (String(card.owner) !== String(req.user._id)) {
-        throw new Conflict('Карточка не удалена! Вы ее не создавали!');
+        throw new Forbidden('Карточка не удалена! Вы ее не создавали!');
       }
-      return res.send({ data: card });
+      return Card.removeById(card._id)
+        .then(() => {
+          res.send({ message: 'Карточка удалена!' });
+        });
     })
     .catch((err) => {
       if (err instanceof mongoose.CastError) {
