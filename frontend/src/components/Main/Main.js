@@ -29,15 +29,10 @@ function Main(props) {
               <Card
                 key={_id}
                 data={data}
-                // link={data.link}
-                // name={data.name}
-                // _id={data._id}
-                // likes={data.likes}
                 onCardClick={props.onCardClick}
                 onCardLike={props.onCardLike}
                 setId={props.setId}
                 onPopupDelete={props.onPopupDelete}
-                handleCardDelete={props.handleCardDelete}
               />
             )
           })}

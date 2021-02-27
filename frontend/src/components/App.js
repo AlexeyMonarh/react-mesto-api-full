@@ -52,37 +52,27 @@ function App() {
           setUserData({ email: res.data.email });
           setLoggedIn(true);
           setСurrentUser(res.data);
-          // history.push("/");
         }
+        api.getInitialCards().then((res) => {
+          setCards(res)
+        })
       })
         .catch((res) => {
           console.log(`Ошибка: ${res}`);
         })
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     if (loggedIn) {
       history.push('/');
-      // .catch(err)
-      // api.getInitialCards().then((res) => {
-      //   setCards(res)
-      // })
+      api.getUser().then((res) => {
+        setСurrentUser(res.data);
+      })
+      .catch(err)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loggedIn]);
-
-  useEffect(() => {
-    Promise.all([api.getUser(), api.getInitialCards()])
-      .then(([userData, cardData]) => {
-        setСurrentUser(userData.data);
-        setCards(cardData);
-      })
-    // api.getUser().then((res) => {
-    //   setСurrentUser(res.data);
-    // }).catch(err)
-  }, []);
 
   useEffect(() => {
     document.addEventListener("keydown", escFunction, false);
@@ -95,6 +85,7 @@ function App() {
     const { email, password } = data;
     projectAuth.register(email, password).then((res) => {
       if (res) {
+        setСurrentUser(res);
         history.push('/signin');
         setRegisterPopup(true);
         setInfoTool({
@@ -158,7 +149,7 @@ function App() {
   function handleCardDelete(cardId) {
     return api.deleteCard(cardId).then(() => {
       const newList = cards.filter((c) => c._id !== cardId);
-      return setCards(newList);
+      setCards(newList);
     })
       .then(closeAllPopups())
       .catch(err)
@@ -248,7 +239,6 @@ function App() {
             onCardLike={handleCardLike}
             onPopupDelete={handleDeleteCardClick}
             setId={setCurrentId}
-            handleCardDelete={handleCardDelete}
           />
           <Route path="/signin">
             <Login

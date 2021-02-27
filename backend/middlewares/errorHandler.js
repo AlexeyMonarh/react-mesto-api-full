@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const errorHandler = (err, req, res, next) => {
   console.log(err);
   if (err instanceof CelebrateError) {
-    return res.status(400).send(err.details.get('body'));
+    return res.status(400).send({ message: err.details.get('body').details[0].message });
   }
   if (err instanceof mongoose.Error.ValidationError) {
     return res.status(400).send(err.details.get('body'));
