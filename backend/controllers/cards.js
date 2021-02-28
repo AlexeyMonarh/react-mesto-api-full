@@ -22,7 +22,7 @@ const postCard = (req, res, next) => {
 };
 
 const deleteCard = (req, res, next) => {
-  Card.findById(req.params._id, { new: true })
+  Card.findById(req.params._id)
     .then((card) => {
       if (!card) {
         throw new NotFound('Карточка не найдена!');
