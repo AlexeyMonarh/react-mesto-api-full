@@ -53,9 +53,6 @@ function App() {
           setLoggedIn(true);
           setСurrentUser(res.data);
         }
-        api.getInitialCards().then((res) => {
-          setCards(res)
-        })
       })
         .catch((res) => {
           console.log(`Ошибка: ${res}`);
@@ -68,6 +65,10 @@ function App() {
       history.push('/');
       api.getUser().then((res) => {
         setСurrentUser(res.data);
+      })
+        .catch(err);
+      api.getInitialCards().then((res) => {
+        setCards(res);
       })
         .catch(err)
     }
@@ -106,13 +107,26 @@ function App() {
   function handleLogin(data) {
     const { email, password } = data;
     setUserData({ email: email });
-    projectAuth.authorize(email, password).then((res) => {
-      if (res.token) {
-        localStorage.setItem('jwt', res.token);
-        setLoggedIn(true);
-        history.push('/');
-      }
-    })
+    projectAuth.authorize(email, password)
+      .then((res) => {
+        if (res.token) {
+          localStorage.setItem('jwt', res.token)
+          api.setToken(res.token);
+          return res.token;
+        }
+      })
+      .then((token) => {
+        projectAuth.getContent(token).then((res) => {
+          if (res) {
+            setUserData({ email: res.data.email });
+            setLoggedIn(true);
+            setСurrentUser(res.data);
+            history.push('/');
+          }
+        })
+          .catch(err)
+      })
+
       .catch(err)
   }
 
