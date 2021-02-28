@@ -30,7 +30,7 @@ const deleteCard = (req, res, next) => {
       if (String(card.owner) !== String(req.user._id)) {
         throw new Forbidden('Карточка не удалена! Вы ее не создавали!');
       }
-      return Card.removeById(card._id)
+      return Card.findByIdAndRemove(card._id)
         .then(() => {
           res.send({ message: 'Карточка удалена!' });
         });
